@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiController;
 use Illuminate\Http\Request;
 
 /*
@@ -17,8 +18,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/test', function () {
-    return "I am in api routes.";
+Route::post('/login', function (Request $request) {
+    return (new ApiController())->login($request);
+});
+
+Route::group([
+    'middleware' => 'authenticate_request'
+], function () {
+
+    Route::get('/test', function () {
+        return "I am in api routes.";
+    });
 });
 
 Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function () {
