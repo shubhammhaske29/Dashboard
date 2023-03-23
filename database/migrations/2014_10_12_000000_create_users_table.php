@@ -19,8 +19,9 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->integer('role_id');
-            $table->integer('token');
-            $table->rememberToken();
+            $table->integer('vehicle_id')->nullable();
+            $table->date('assign_vehicle_date')->nullable();
+            $table->string('token');
             $table->timestamps();
             $table->integer('deleted_by')->nullable();
             $table->softDeletes();

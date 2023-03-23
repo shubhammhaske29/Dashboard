@@ -26,8 +26,8 @@ Route::group([
     'middleware' => 'authenticate_request'
 ], function () {
 
-    Route::get('/test', function () {
-        return "I am in api routes.";
+    Route::get('/vehiclesList', function () {
+        return (new ApiController())->vehiclesList();
     });
 });
 

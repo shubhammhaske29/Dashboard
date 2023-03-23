@@ -22,7 +22,7 @@ class UserController extends Controller
         $user->email = $request->get('name');
         $user->role_id = $request->get('role_id');
         $user->password = bcrypt($request->get('password'));
-        $user->token = bcrypt('admin@gmail.com' . $timestamp);
+        $user->token = bcrypt($request->get('name') . $timestamp);
         return $user;
     }
 
