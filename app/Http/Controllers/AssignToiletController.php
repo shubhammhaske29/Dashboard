@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\AssignToilets;
+use App\Toilet;
 use App\User;
 use App\UserChecker;
 use App\Vehicle;
@@ -18,10 +20,15 @@ class AssignToiletController extends Controller
 
     protected function prepareData($request)
     {
-        $data               = new \stdClass();
-        $data->user_id         = $request->get('user_id');
-        $data->zone         = $request->get('zone');
-        $data->ward         = $request->get('ward');
+        $data = new \stdClass();
+        $date = strtotime($request->get('assign_date'));
+        $data->assign_date = date('Y-m-d', $date);
+        $data->vehicle_id = $request->get('vehicle_id');
+        $data->cleaning_type_id = $request->get('cleaning_type_id');
+        $data->zone = $request->get('zone');
+        $data->ward = $request->get('ward');
+        $data->toilet_id = $request->get('toilet_id');
+
         return $data;
     }
 
@@ -38,38 +45,47 @@ class AssignToiletController extends Controller
     {
         try
         {
-            $user_checker = new UserChecker();
+            $assign_toilet = new AssignToilets();
 
-            if(!$request->isMethod('POST'))
-            {
+            if (!$request->isMethod('POST')) {
+                $today = date("Y-m-d");
+                $tomorrow = date("Y-m-d", strtotime("+1 days"));
                 $vehicles = Vehicle::getVehicleList();
+                $toilet_list = [];
+
+                foreach (Toilet::getToiletLists($today) as $toilet){
+                    $toilet_list[date("d-m-Y")][$toilet->ward][$toilet->id] = $toilet;
+                }
+                foreach (Toilet::getToiletLists($tomorrow) as $toilet){
+                    $toilet_list[date("d-m-Y", strtotime("+1 days"))][$toilet->ward][$toilet->id] = $toilet;
+                }
 
                 return view('assign_toilet.add')
-                    ->with('vehicles',$vehicles);
+                    ->with('vehicles', $vehicles)
+                    ->with('toilet_list', $toilet_list);
             }
 
             $validator = Validator::make($request->all(), [
-                'user_id'            => 'required|max:255',
-                'zone'            => 'required|max:255',
-                'ward'            => 'required|max:255'
+                'vehicle_id'            => 'required|max:255',
+                'toilet_id'            => 'required|max:255'
             ]);
 
             if ($validator->fails())
             {
-                return Redirect::to(route("add_user_checker"))->withErrors($validator)->withInput($request->all());
+                return Redirect::to(route("assign_toilet"))->withErrors($validator)->withInput($request->all());
             }
 
-            $checker_data = $this->prepareData($request);
+            $data = $this->prepareData($request);
 
-            $user_checker->saveData($checker_data);
+            $assign_toilet->saveData($data);
 
-            $request->session()->flash('message', 'Checker Assigned successfully');
-            return Redirect::to(route("user_checker_home"));
+            $request->session()->flash('message', 'Toilet Assigned successfully');
+            return Redirect::to(route("assign_toilet_home"));
         }
         catch (\Exception $e)
         {
             $request->session()->flash('error', $e->getMessage());
-            return Redirect::to(route("add_user_checker"));
+            return Redirect::to(route("assign_toilet_home"));
         }
     }
 

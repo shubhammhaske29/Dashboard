@@ -23,8 +23,10 @@ class CreateAssignToiletsTable extends Migration
             $table->integer('toilet_id');
             $table->string('image_path')->nullable();
             $table->integer('completed_by')->nullable();
-            $table->boolean('is_clean')->default(false);
+            $table->boolean('is_reported_not_clean')->default(false);
             $table->timestamps();
+            $table->integer('deleted_by')->nullable();
+            $table->softDeletes();
         });
     }
 

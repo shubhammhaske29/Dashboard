@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 class Toilet extends Authenticatable
@@ -45,6 +46,23 @@ class Toilet extends Authenticatable
     public static function getToiletList()
     {
         $toilets = Toilet::select('toilets.id', 'toilets.zone','toilets.ward','toilets.name','toilets.number','toilets.address','toilets.latitude','toilets.longitude')
+            ->whereNull('toilets.deleted_by')
+            ->orderBy('toilets.id', 'DESC')
+            ->get();
+
+        return $toilets;
+    }
+
+    public static function getToiletLists($date)
+    {
+
+        $toilet_ids = AssignToilets::select('assign_toilets.toilet_id')
+            ->where('assign_toilets.assign_date', '=', $date)
+            ->whereNull('assign_toilets.deleted_by')
+            ->get()->toArray();
+
+        $toilets = Toilet::select('toilets.id', 'toilets.name','toilets.ward')
+            ->whereNotIn('toilets.id', $toilet_ids)
             ->whereNull('toilets.deleted_by')
             ->orderBy('toilets.id', 'DESC')
             ->get();

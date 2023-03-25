@@ -77,9 +77,9 @@
                                         <div class="form-group row">
                                             <div class="col-md-3">
                                             </div>
-                                            <label class="col-md-3 form-control-label" for="cleaning_type">Cleaning Type</label>
+                                            <label class="col-md-3 form-control-label" for="cleaning_type_id">Cleaning Type</label>
                                             <div class="col-md-3">
-                                                <select class="form-control" name="cleaning_type" id="cleaning_type">
+                                                <select class="form-control" name="cleaning_type_id" id="cleaning_type_id">
                                                     <option disabled>--Select Cleaning Type--</option>
                                                     @foreach (config('common.cleaning_types') as $id=>$type)
                                                         <option value='{{$id}}'>{{$type}}</option>
@@ -112,6 +112,18 @@
                                             <label class="col-md-3 form-control-label" for="ward">Ward</label>
                                             <div class="col-md-3">
                                                 <select class="form-control" name="ward" id="ward">
+                                                </select>
+                                            </div><!--col-->
+                                            <div class="col-md-3">
+                                            </div>
+                                        </div><!--form-group-->
+
+                                        <div class="form-group row">
+                                            <div class="col-md-3">
+                                            </div>
+                                            <label class="col-md-3 form-control-label" for="toilet_id">Toilet</label>
+                                            <div class="col-md-3">
+                                                <select class="form-control" name="toilet_id" id="toilet_id">
                                                 </select>
                                             </div><!--col-->
                                             <div class="col-md-3">
@@ -154,12 +166,60 @@
                 "maxDate": new Date()
             });
 
-            showWard();
+            showToiletWard();
 
             $("#zone").change(function () {
-                showWard();
+                showToiletWard();
+            });
+            $("#ward").change(function () {
+                showToilets();
+            });
+            $("#assign_date").change(function () {
+                showToilets();
             });
         });
+
+        function showToiletWard() {
+            let zone = $('#zone option:selected').val()
+            let zones = '<?php echo json_encode(config('common.zones'));?>';
+            zones = JSON.parse(zones);
+            let wards = zones[zone];
+            let content = '';
+            let index = 0;
+
+            $.each(wards, function (k,ward) {
+                if (index === 0) {
+                    content += '<option value="' + ward + '" selected>' + ward + '</option>';
+                } else {
+                    content += '<option value="' + ward + '">' + ward + '</option>';
+                }
+                index++;
+            });
+            $('#ward').html(content);
+            showToilets();
+        }
+
+        function showToilets() {
+
+            let ward = $('#ward option:selected').val();
+            let date = $('#assign_date').val();
+
+            let toilet_list = '<?php echo json_encode($toilet_list);?>';
+            toilet_list = JSON.parse(toilet_list);
+            let toilets = toilet_list[date][ward];
+            let content = '';
+            let index = 0;
+
+            $.each(toilets, function (k,toilet) {
+                if (index === 0) {
+                    content += '<option value="' + k + '" selected>' + toilet['name'] + '</option>';
+                } else {
+                    content += '<option value="' + k + '">' + toilet['name'] + '</option>';
+                }
+                index++;
+            });
+            $('#toilet_id').html(content);
+        }
 
     </script>
 
