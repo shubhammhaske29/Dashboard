@@ -8,6 +8,7 @@
 <link href="{{ asset('/css/bootstrap-datepicker.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('/css/home.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('/css/fixed-table.css') }}" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 
 <script>
 $( document ).ready(function() {

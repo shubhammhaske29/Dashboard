@@ -84,9 +84,10 @@
 
     </div>
     <script type="text/javascript">
-        $(window).load(function () {
+        $( document ).ready(function() {
             //$('#tab-header').html('Users');
-            //$('#user_table').DataTable();
+            $.noConflict();
+            $('#user_table').DataTable();
 
         });
 
