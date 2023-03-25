@@ -29,6 +29,18 @@ Route::group([
     Route::get('/vehiclesList', function () {
         return (new ApiController())->vehiclesList();
     });
+
+    Route::post('/assignVehicleToUser', function (Request $request) {
+        return (new ApiController())->assignVehicleToUser($request);
+    });
+
+    Route::post('/addExpense', function (Request $request) {
+        return (new ApiController())->addExpense($request);
+    });
+
+    Route::get('/getExpense', function (Request $request) {
+        return (new ApiController())->getExpense($request);
+    });
 });
 
 Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function () {

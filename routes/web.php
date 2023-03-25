@@ -34,15 +34,15 @@ Route::any('/add_user_checker', ['as' => 'add_user_checker', 'uses' => 'CheckerC
 Route::any('/edit_user_checker/{id}', ['as' => 'edit_user_checker', 'uses' => 'CheckerController@edit']);
 Route::get('/delete_user_checker/{id}', ['as' => 'delete_user_checker', 'uses' => 'CheckerController@delete']);
 
-Route::any('/user_checker_home', ['as' => 'user_checker_home', 'uses' => 'CheckerController@index']);
-Route::any('/add_user_checker', ['as' => 'add_user_checker', 'uses' => 'CheckerController@add']);
-Route::any('/edit_user_checker/{id}', ['as' => 'edit_user_checker', 'uses' => 'CheckerController@edit']);
-Route::get('/delete_user_checker/{id}', ['as' => 'delete_user_checker', 'uses' => 'CheckerController@delete']);
-
 Route::any('/toilet_home', ['as' => 'toilet_home', 'uses' => 'ToiletController@index']);
 Route::any('/add_toilet', ['as' => 'add_toilet', 'uses' => 'ToiletController@add']);
 Route::any('/edit_toilet/{id}', ['as' => 'edit_toilet', 'uses' => 'ToiletController@edit']);
 Route::get('/delete_toilet/{id}', ['as' => 'delete_toilet', 'uses' => 'ToiletController@delete']);
+
+Route::any('/assign_toilet_home', ['as' => 'assign_toilet_home', 'uses' => 'AssignToiletController@index']);
+Route::any('/assign_toilet', ['as' => 'assign_toilet', 'uses' => 'AssignToiletController@add']);
+Route::get('/delete_assign_toilet/{id}', ['as' => 'delete_assign_toilet', 'uses' => 'AssignToiletController@delete']);
+
 
 
 Auth::routes();

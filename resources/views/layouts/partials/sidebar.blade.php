@@ -34,6 +34,8 @@ $active_tab     = \Request::segment(1);
 
             <li class="@if($active_tab == 'toilet_home') active @endif"><a href="{{ route('toilet_home') }}"><i class='fa fa-home'></i><span>Toilet</span></a></li>
 
+            <li class="@if($active_tab == 'assign_toilet_home') active @endif"><a href="{{ route('assign_toilet_home') }}"><i class='fa fa-home'></i><span>Assign Toilet</span></a></li>
+
             <li class="@if($active_tab == 'logout') active @endif">
 
                 <a href="{{ url('/logout') }}" id="logout" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
