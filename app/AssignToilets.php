@@ -43,33 +43,44 @@ class AssignToilets extends Authenticatable
     }
 
 
-    public static function getUserCheckerList()
+    public static function getAssignToiletsList()
     {
-        $user_checkers = DB::table('user_checkers')
-            ->leftJoin('users', 'users.id', '=', 'user_checkers.user_id')
-            ->select('user_checkers.id','users.name', 'user_checkers.user_id','user_checkers.zone','user_checkers.ward')
+        $data = DB::table('assign_toilets')
+            ->leftJoin('toilets', 'toilets.id', '=', 'assign_toilets.toilet_id')
+            ->leftJoin('vehicles', 'vehicles.id', '=', 'assign_toilets.vehicle_id')
+            ->leftJoin('cleaning_types', 'cleaning_types.id', '=', 'assign_toilets.cleaning_type_id')
+            ->select('assign_toilets.id','assign_toilets.assign_date', 'toilets.name','vehicles.number','cleaning_types.name as cleaning_type_name','assign_toilets.zone','assign_toilets.ward')
+            ->whereNull('assign_toilets.deleted_by')
+            ->whereNull('assign_toilets.image_path')
+            ->WhereNull('assign_toilets.completed_by')
+            ->orWhere('assign_toilets.is_reported_not_clean',true)
+            ->whereNull('assign_toilets.deleted_by')
             ->get();
 
-        return $user_checkers;
+        return $data;
     }
 
-    public static function getUsersForCheckerAssignment()
+    public static function getAssignToiletsListByVehicleId($vehicle_id)
     {
-        $checker_id = config('common.user_roles.Checker');
-        $users = DB::table('users')
-            ->leftJoin('user_checkers', 'users.id', '=', 'user_checkers.user_id')
-            ->select('users.id', 'users.name')
-            ->where('users.role_id', '=', $checker_id)
-            ->whereNull('user_checkers.id')
-            ->orderBy('users.id', 'DESC')
+        $data = DB::table('assign_toilets')
+            ->leftJoin('toilets', 'toilets.id', '=', 'assign_toilets.toilet_id')
+            ->leftJoin('vehicles', 'vehicles.id', '=', 'assign_toilets.vehicle_id')
+            ->leftJoin('cleaning_types', 'cleaning_types.id', '=', 'assign_toilets.cleaning_type_id')
+            ->select('assign_toilets.id','toilets.name as toilet_name', 'toilets.number as toilet_number','toilets.address as toilet_address','toilets.latitude','toilets.longitude','vehicles.number as vehicle_number','cleaning_types.name as cleaning_type_name','assign_toilets.zone','assign_toilets.ward')
+            ->where('assign_toilets.vehicle_id', '=', $vehicle_id)
+            ->whereNull('assign_toilets.deleted_by')
+            ->WhereNull('assign_toilets.completed_by')
             ->get();
 
-        return $users;
+        return $data;
     }
 
     public static function deleteAssignToilet($id)
     {
-        AssignToilets::where('id',$id)->delete();
+        $obj = AssignToilets::find($id);
+        $obj->deleted_at = now();
+        $obj->deleted_by = Auth::user()->id;
+        $obj->update();
     }
 
 }

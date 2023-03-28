@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->integer('vehicle_id')->nullable();
             $table->date('assign_vehicle_date')->nullable();
             $table->string('token');
+            $table->rememberToken();
             $table->timestamps();
             $table->integer('deleted_by')->nullable();
             $table->softDeletes();

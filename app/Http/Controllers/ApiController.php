@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AssignToilets;
 use App\Expenses;
 use App\User;
 use App\Vehicle;
@@ -99,6 +100,20 @@ class ApiController extends Controller
             $expense = Expenses::getTodayExpense($vehicle_id);
 
             return response()->json(['success' => true, 'message' => 'success', 'data' => $expense]);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+
+    }
+
+    public function getToiletList(Request $request)
+    {
+        try {
+            $vehicle_id = $request->get('vehicle_id');
+            $toilets = AssignToilets::getAssignToiletsListByVehicleId($vehicle_id);
+
+            return response()->json(['success' => true, 'message' => 'success', 'data' => $toilets]);
 
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);

@@ -53,15 +53,31 @@
                                     <thead class="thead-light">
                                     <tr>
                                         <th>S.No.</th>
-                                        <th>User</th>
+                                        <th>Assign Date</th>
+                                        <th>Toilet Name</th>
+                                        <th>Vehicle Number</th>
+                                        <th>Cleaning Type</th>
                                         <th>Zone</th>
                                         <th>Ward</th>
-                                        <th>Edit/Delete</th>
+                                        <th>Delete</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php $count = 1; ?>
-
+                                    @foreach($assign_toilets as $assign_toilet)
+                                        <tr>
+                                            <td>{{ $count++ }}.</td>
+                                            <td>{{ $assign_toilet->assign_date }}</td>
+                                            <td>{{ $assign_toilet->name }}</td>
+                                            <td>{{ $assign_toilet->number }}</td>
+                                            <td>{{ $assign_toilet->cleaning_type_name }}</td>
+                                            <td>{{ $assign_toilet->zone }}</td>
+                                            <td>{{ $assign_toilet->ward }}</td>
+                                            <td>
+                                                <a href="{{ route("delete_assign_toilet",$assign_toilet->id) }}" data-toggle="tooltip" data-placement="top" title="Delete" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -75,9 +91,10 @@
 
     </div>
     <script type="text/javascript">
-        $(window).load(function () {
+        $( document ).ready(function() {
             //$('#tab-header').html('Users');
-            //$('#user_table').DataTable();
+            $.noConflict();
+            $('#user_table').DataTable();
 
         });
 

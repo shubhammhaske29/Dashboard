@@ -35,10 +35,10 @@ class AssignToiletController extends Controller
     public function index()
     {
 
-        $vehicles = Vehicle::getVehicleList();
+        $data = AssignToilets::getAssignToiletsList();
 
         return view('assign_toilet.index')
-            ->with('vehicles',$vehicles);
+            ->with('assign_toilets',$data);
     }
 
     public function add(Request $request)
@@ -89,56 +89,14 @@ class AssignToiletController extends Controller
         }
     }
 
-    public function edit($id, Request $request)
-    {
-        try
-        {
-            if(!$request->isMethod('POST'))
-            {
-                $user_checker = UserChecker::find($id);
-                $user = User::find($user_checker->user_id);
-                return view('checker.edit')
-                    ->with('user_checker',$user_checker)
-                    ->with('user',$user);
-            }
-
-            $validator = Validator::make($request->all(), [
-                'user_id'            => 'required|max:255',
-                'zone'            => 'required|max:255',
-                'ward'            => 'required|max:255'
-            ]);
-
-            if ($validator->fails())
-            {
-                return Redirect::to(route("edit_vehicle",$id))->withErrors($validator)->withInput($request->all());
-            }
-
-            $checker_data = $this->prepareData($request);
-
-            $user_checker = new UserChecker();
-            $user_checker->updateData($checker_data,$id);
-
-            $request->session()->flash('message', 'Checker Data Updated successfully');
-            return Redirect::to(route("user_checker_home"));
-        }
-        catch (\Exception $e)
-        {
-            $request->session()->flash('error', 'Something Went Wrong');
-            return Redirect::to(route("edit_user_checker",$id));
-        }
-    }
-
     public function delete($id, Request $request)
     {
-        try
-        {
-            UserChecker::deleteUserChecker($id);
-            $request->session()->flash('message', 'Checker Data Deleted successfully');
-        }
-        catch (\Exception $e)
-        {
+        try {
+            AssignToilets::deleteAssignToilet($id);
+            $request->session()->flash('message', 'Assign Toilet Deleted successfully');
+        } catch (\Exception $e) {
             $request->session()->flash('error', 'Something Went Wrong');
         }
-        return Redirect::to(route("user_checker_home"));
+        return Redirect::to(route("assign_toilet_home"));
     }
 }

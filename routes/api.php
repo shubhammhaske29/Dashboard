@@ -26,20 +26,24 @@ Route::group([
     'middleware' => 'authenticate_request'
 ], function () {
 
-    Route::get('/vehiclesList', function () {
+    Route::any('/vehiclesList', function () {
         return (new ApiController())->vehiclesList();
     });
 
-    Route::post('/assignVehicleToUser', function (Request $request) {
+    Route::any('/assignVehicleToUser', function (Request $request) {
         return (new ApiController())->assignVehicleToUser($request);
     });
 
-    Route::post('/addExpense', function (Request $request) {
+    Route::any('/addExpense', function (Request $request) {
         return (new ApiController())->addExpense($request);
     });
 
-    Route::get('/getExpense', function (Request $request) {
+    Route::any('/getExpense', function (Request $request) {
         return (new ApiController())->getExpense($request);
+    });
+
+    Route::any('/getToiletList', function (Request $request) {
+        return (new ApiController())->getToiletList($request);
     });
 });
 
