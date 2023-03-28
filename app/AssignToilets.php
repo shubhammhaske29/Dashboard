@@ -68,6 +68,7 @@ class AssignToilets extends Authenticatable
             ->leftJoin('cleaning_types', 'cleaning_types.id', '=', 'assign_toilets.cleaning_type_id')
             ->select('assign_toilets.id','toilets.name as toilet_name', 'toilets.number as toilet_number','toilets.address as toilet_address','toilets.latitude','toilets.longitude','vehicles.number as vehicle_number','cleaning_types.name as cleaning_type_name','assign_toilets.zone','assign_toilets.ward')
             ->where('assign_toilets.vehicle_id', '=', $vehicle_id)
+            ->where('assign_toilets.assign_date', '=', \Carbon\Carbon::today())
             ->whereNull('assign_toilets.deleted_by')
             ->WhereNull('assign_toilets.completed_by')
             ->get();
