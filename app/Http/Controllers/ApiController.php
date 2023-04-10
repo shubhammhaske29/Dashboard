@@ -127,14 +127,19 @@ class ApiController extends Controller
     public function uploadFile(Request $request)
     {
         if (!$request->hasFile('fileNames')) {
-            return response()->json(['upload_file_not_found'], 400);
+            return response()->json(['success' => false, 'message' => 'File Not Found']);
         }
 
         $allowedfileExtension = ['jpg', 'png'];
         $files = $request->file('fileNames');
         $id = $request->get('id');
         $type = $request->get('type');
+        $assign_toilet = AssignToilets::find($id);
 
+        if(true == is_null($assign_toilet)){
+            return response()->json(['success' => false, 'message' => 'Please Provide Correct Toilet Id']);
+        }
+        $destinationPath = '';
         foreach ($files as $file) {
 
             $extension = $file->getClientOriginalExtension();
@@ -142,14 +147,21 @@ class ApiController extends Controller
             $check = in_array($extension, $allowedfileExtension);
 
             if ($check) {
-                $destinationPath = storage_path() . '/Images/' . $id . '/' . $type;
-                $file->move($destinationPath, time() . '.' . $file->getClientOriginalExtension());
+                $destinationPath = storage_path() . '/Images/' . $id . '/';
+                $file->move($destinationPath.$type, time() . '.' . $file->getClientOriginalExtension());
             } else {
-                return response()->json(['invalid_file_format'], 422);
+                return response()->json(['success' => false, 'message' => 'Invalid File Format']);
             }
         }
 
-        return response()->json(['file_uploaded'], 200);
+        if ($destinationPath = '') {
+            return response()->json(['success' => false, 'message' => 'File Not Found']);
+        }
+
+        $assign_toilet->image_path	= $destinationPath;
+        $assign_toilet->save();
+
+        return response()->json(['success' => true, 'message' => 'file uploaded Successfully']);
 
     }
 

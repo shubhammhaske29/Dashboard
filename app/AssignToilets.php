@@ -51,7 +51,7 @@ class AssignToilets extends Authenticatable
                             LEFT JOIN toilets ON (toilets.id = assign_toilets.toilet_id)
                             LEFT JOIN vehicles ON (vehicles.id = assign_toilets.vehicle_id)
                             LEFT JOIN cleaning_types ON (cleaning_types.id = assign_toilets.cleaning_type_id)
-                            where (assign_toilets.deleted_by IS NULL AND  assign_toilets.image_path IS NULL AND assign_toilets.completed_by IS NULL AND (assign_toilets.assign_date = ? OR assign_toilets.assign_date = ?)) OR (assign_toilets.is_reported_not_clean is TRUE AND assign_toilets.deleted_by IS NULL)',[\Carbon\Carbon::today(),\Carbon\Carbon::tomorrow()]);
+                            where (assign_toilets.deleted_by IS NULL AND assign_toilets.image_path IS NULL AND assign_toilets.completed_by IS NULL AND (assign_toilets.assign_date = ? OR assign_toilets.assign_date = ?)) OR (assign_toilets.is_reported_not_clean is TRUE AND assign_toilets.deleted_by IS NULL)',[\Carbon\Carbon::today(),\Carbon\Carbon::tomorrow()]);
 
         return $data;
     }
