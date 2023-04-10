@@ -25,7 +25,7 @@ class ApiController extends Controller
             if (!Hash::check($password, $user->password)) {
                 return response()->json(['success' => false, 'message' => 'Invalid Username and Password']);
             }
-            return response()->json(['success' => true, 'message' => 'success', 'data' => ['user_id' => $user->id,'role' => config('common.user_ids')[$user->role_id], 'token' => $user->token,'vehicle_id' => $user->vehicle_id,'assign_vehicle_date' => $user->assign_vehicle_date]]);
+            return response()->json(['success' => true, 'message' => 'success', 'data' => ['user_id' => $user->id, 'role' => config('common.user_ids')[$user->role_id], 'token' => $user->token, 'vehicle_id' => $user->vehicle_id, 'assign_vehicle_date' => $user->assign_vehicle_date]]);
 
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
@@ -75,12 +75,13 @@ class ApiController extends Controller
         $data->updated_by = $request->get('updated_by');
         return $data;
     }
+
     public function addExpense(Request $request)
     {
         try {
             $vehicle_id = $request->get('vehicle_id');
             $expense = Expenses::getTodayExpense($vehicle_id);
-            if(empty($expense)){
+            if (empty($expense)) {
                 $expense = new Expenses();
             }
             $data = $this->prepareExpense($request);
@@ -111,13 +112,44 @@ class ApiController extends Controller
     {
         try {
             $vehicle_id = $request->get('vehicle_id');
-            $toilets = AssignToilets::getAssignToiletsListByVehicleId($vehicle_id);
+            $user_type = $request->get('user_type');
+            $toilets = AssignToilets::getAssignToiletsListByVehicleId($vehicle_id,$user_type);
 
             return response()->json(['success' => true, 'message' => 'success', 'data' => $toilets]);
 
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
+
+    }
+
+
+    public function uploadFile(Request $request)
+    {
+        if (!$request->hasFile('fileNames')) {
+            return response()->json(['upload_file_not_found'], 400);
+        }
+
+        $allowedfileExtension = ['jpg', 'png'];
+        $files = $request->file('fileNames');
+        $id = $request->get('id');
+        $type = $request->get('type');
+
+        foreach ($files as $file) {
+
+            $extension = $file->getClientOriginalExtension();
+
+            $check = in_array($extension, $allowedfileExtension);
+
+            if ($check) {
+                $destinationPath = storage_path() . '/Images/' . $id . '/' . $type;
+                $file->move($destinationPath, time() . '.' . $file->getClientOriginalExtension());
+            } else {
+                return response()->json(['invalid_file_format'], 422);
+            }
+        }
+
+        return response()->json(['file_uploaded'], 200);
 
     }
 

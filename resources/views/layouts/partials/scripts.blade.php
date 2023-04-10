@@ -5,10 +5,14 @@
 
 <script src="{{ url (mix('/js/app.js')) }}" type="text/javascript"></script>
 <script src="{{ asset ('/js/bootstrap-datepicker.js') }}" type="text/javascript"></script>
+<script src="{{ asset('/js/bootstrap.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset ('/js/bootstrap-multiselect.min.js') }}" type="text/javascript"></script>
 <link href="{{ asset('/css/bootstrap-datepicker.css') }}" rel="stylesheet" type="text/css"/>
+<link href="{{ asset('/css/bootstrap-multiselect.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('/css/home.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('/css/fixed-table.css') }}" rel="stylesheet" type="text/css"/>
 <link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
 
 <script>
 $( document ).ready(function() {

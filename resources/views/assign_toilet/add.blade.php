@@ -123,7 +123,8 @@
                                             </div>
                                             <label class="col-md-3 form-control-label" for="toilet_id">Toilet</label>
                                             <div class="col-md-3">
-                                                <select class="form-control" name="toilet_id" id="toilet_id">
+                                                <select class="form-control " name="toilet_id[]" id="toilet_id" multiple="multiple">
+
                                                 </select>
                                             </div><!--col-->
                                             <div class="col-md-3">
@@ -218,7 +219,20 @@
                 }
                 index++;
             });
-            $('#toilet_id').html(content);
+            $("#toilet_id").html(content);
+
+            $("#toilet_id").multiselect({
+                nonSelectedText: 'Select Toilet',
+                enableFiltering: true,
+                includeSelectAllOption: true,
+                enableCaseInsensitiveFiltering: true,
+                buttonWidth:'420px'
+            });
+
+            $("#toilet_id").multiselect('rebuild');
+            $("#toilet_id").multiselect('selectAll', false);
+            $("#toilet_id").multiselect('updateButtonText');
+
         }
 
     </script>

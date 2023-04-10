@@ -27,7 +27,6 @@ class AssignToiletController extends Controller
         $data->cleaning_type_id = $request->get('cleaning_type_id');
         $data->zone = $request->get('zone');
         $data->ward = $request->get('ward');
-        $data->toilet_id = $request->get('toilet_id');
 
         return $data;
     }
@@ -45,7 +44,6 @@ class AssignToiletController extends Controller
     {
         try
         {
-            $assign_toilet = new AssignToilets();
 
             if (!$request->isMethod('POST')) {
                 $today = date("Y-m-d");
@@ -75,9 +73,16 @@ class AssignToiletController extends Controller
                 return Redirect::to(route("assign_toilet"))->withErrors($validator)->withInput($request->all());
             }
 
-            $data = $this->prepareData($request);
 
-            $assign_toilet->saveData($data);
+            $arrToilets = $request->get('toilet_id');
+
+            foreach ($arrToilets as $toiletId) {
+                $assign_toilet = new AssignToilets();
+                $data = $this->prepareData($request);
+                $data->toilet_id = $toiletId;
+                $assign_toilet->saveData($data);
+            }
+
 
             $request->session()->flash('message', 'Toilet Assigned successfully');
             return Redirect::to(route("assign_toilet_home"));

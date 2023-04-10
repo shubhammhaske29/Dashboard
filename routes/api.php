@@ -45,6 +45,11 @@ Route::group([
     Route::any('/getToiletList', function (Request $request) {
         return (new ApiController())->getToiletList($request);
     });
+
+    Route::any('/uploadFile', function (Request $request) {
+        return (new ApiController())->uploadFile($request);
+    });
+
 });
 
 Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function () {
