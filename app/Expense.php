@@ -5,10 +5,9 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Auth;
 
-class Expenses extends Authenticatable
+
+class Expense extends Authenticatable
 {
     use Notifiable;
 
@@ -20,7 +19,7 @@ class Expenses extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'expense_date','vehicle_id','start_read','end_read','petrol_amount','diesel_amount'
+        'expense_date','vehicle_id','start_read','end_read','petrol_amount','diesel_amount','updated_by'
     ];
 
 
@@ -34,7 +33,7 @@ class Expenses extends Authenticatable
 
     public function updateData($data,$id)
     {
-        $user_checker = Expenses::find($id);
+        $user_checker = Expense::find($id);
         foreach($data as $key =>$value)
         {
             $user_checker->$key = $value;
@@ -45,7 +44,7 @@ class Expenses extends Authenticatable
 
     public static function getTodayExpense($vehicle_id)
     {
-        $expense = Expenses::where('vehicle_id','=',$vehicle_id)
+        $expense = Expense::where('vehicle_id','=',$vehicle_id)
             ->where('expense_date', '=', date("Y-m-d"))
             ->first();
 
@@ -68,7 +67,7 @@ class Expenses extends Authenticatable
 
     public static function deleteAssignToilet($id)
     {
-        Expenses::where('id',$id)->delete();
+        Expense::where('id',$id)->delete();
     }
 
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AssignToilets;
-use App\Expenses;
+use App\Expense;
 use App\User;
 use App\Vehicle;
 use Illuminate\Http\Request;
@@ -80,9 +80,9 @@ class ApiController extends Controller
     {
         try {
             $vehicle_id = $request->get('vehicle_id');
-            $expense = Expenses::getTodayExpense($vehicle_id);
+            $expense = Expense::getTodayExpense($vehicle_id);
             if (empty($expense)) {
-                $expense = new Expenses();
+                $expense = new Expense();
             }
             $data = $this->prepareExpense($request);
             $expense->saveData($data);
@@ -98,7 +98,7 @@ class ApiController extends Controller
     {
         try {
             $vehicle_id = $request->get('vehicle_id');
-            $expense = Expenses::getTodayExpense($vehicle_id);
+            $expense = Expense::getTodayExpense($vehicle_id);
 
             return response()->json(['success' => true, 'message' => 'success', 'data' => $expense]);
 
