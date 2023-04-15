@@ -113,9 +113,31 @@ class ApiController extends Controller
         try {
             $vehicle_id = $request->get('vehicle_id');
             $user_type = $request->get('user_type');
-            $toilets = AssignToilets::getAssignToiletsListByVehicleId($vehicle_id,$user_type);
+            $user_id = $request->get('user_id');
+            $toilets = AssignToilets::getAssignToiletsListByVehicleId($vehicle_id,$user_type,$user_id);
 
             return response()->json(['success' => true, 'message' => 'success', 'data' => $toilets]);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+
+    }
+
+    public function reportToilet(Request $request)
+    {
+        try {
+            $toilet_id = $request->get('toilet_id');
+            $assign_toilet = AssignToilets::find($toilet_id);
+
+            if(true == is_null($assign_toilet)){
+                //return response()->json(['success' => false, 'message' => 'Please Provide Correct Toilet Id']);
+                return response()->json(['success' => false]);
+            }
+            $assign_toilet->is_reported_not_clean = 1;
+            $assign_toilet->save();
+
+            return response()->json(['success' => true, 'message' => 'success', 'data' => 'Toilet Reported not clean']);
 
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()]);
@@ -127,7 +149,8 @@ class ApiController extends Controller
     public function uploadFile(Request $request)
     {
         if (!$request->hasFile('fileNames')) {
-            return response()->json(['success' => false, 'message' => 'File Not Found']);
+            //return response()->json(['success' => false, 'message' => 'File Not Found']);
+            return response()->json(['success' => false]);
         }
 
         $allowedfileExtension = ['jpg', 'png'];
@@ -137,7 +160,8 @@ class ApiController extends Controller
         $assign_toilet = AssignToilets::find($id);
 
         if(true == is_null($assign_toilet)){
-            return response()->json(['success' => false, 'message' => 'Please Provide Correct Toilet Id']);
+            //return response()->json(['success' => false, 'message' => 'Please Provide Correct Toilet Id']);
+            return response()->json(['success' => false]);
         }
         $destinationPath = '';
         foreach ($files as $file) {
@@ -150,18 +174,21 @@ class ApiController extends Controller
                 $destinationPath = storage_path() . '/Images/' . $id . '/';
                 $file->move($destinationPath.$type, time() . '.' . $file->getClientOriginalExtension());
             } else {
-                return response()->json(['success' => false, 'message' => 'Invalid File Format']);
+                //return response()->json(['success' => false, 'message' => 'Invalid File Format']);
+                return response()->json(['success' => false]);
             }
         }
 
         if ($destinationPath = '') {
-            return response()->json(['success' => false, 'message' => 'File Not Found']);
+            //return response()->json(['success' => false, 'message' => 'File Not Found']);
+            return response()->json(['success' => false]);
         }
 
         $assign_toilet->image_path	= $destinationPath;
         $assign_toilet->save();
 
-        return response()->json(['success' => true, 'message' => 'file uploaded Successfully']);
+        //return response()->json(['success' => true, 'message' => 'file uploaded Successfully']);
+        return response()->json(['success' => true]);
 
     }
 

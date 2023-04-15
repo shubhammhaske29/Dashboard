@@ -56,7 +56,7 @@ class AssignToilets extends Authenticatable
         return $data;
     }
 
-    public static function getAssignToiletsListByVehicleId($vehicle_id,$user_type)
+    public static function getAssignToiletsListByVehicleId($vehicle_id,$user_type,$user_id)
     {
         $data = [];
         if($user_type == 'Driver'){
@@ -82,7 +82,7 @@ class AssignToilets extends Authenticatable
                             LEFT JOIN vehicles ON (vehicles.id = assign_toilets.vehicle_id)
                             LEFT JOIN cleaning_types ON (cleaning_types.id = assign_toilets.cleaning_type_id)
                             JOIN user_checkers ON (user_checkers.ward = assign_toilets.ward)
-                            where assign_toilets.assign_date = ? AND assign_toilets.deleted_by is NULL AND assign_toilets.completed_by IS NULL', [\Carbon\Carbon::today()]);
+                            where assign_toilets.assign_date = ? AND user_checkers.user_id = ? AND assign_toilets.deleted_by is NULL AND assign_toilets.completed_by IS NULL', [\Carbon\Carbon::today(),$user_id]);
 
         }
 

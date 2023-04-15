@@ -50,6 +50,10 @@ Route::group([
         return (new ApiController())->uploadFile($request);
     });
 
+    Route::any('/reportToilet', function (Request $request) {
+        return (new ApiController())->reportToilet($request);
+    });
+
 });
 
 Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function () {
