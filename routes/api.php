@@ -54,6 +54,10 @@ Route::group([
         return (new ApiController())->reportToilet($request);
     });
 
+    Route::any('/getUserInfo', function (Request $request) {
+        return (new ApiController())->getUserInfo($request);
+    });
+
 });
 
 Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function () {

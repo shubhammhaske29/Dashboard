@@ -192,4 +192,21 @@ class ApiController extends Controller
 
     }
 
+    public function getUserInfo(Request $request)
+    {
+        try {
+            $user_id = $request->get('user_id');
+
+            $user = User::find($user_id);
+            if (!$user) {
+                return response()->json(['success' => false, 'message' => 'User Not Exist']);
+            }
+            return response()->json(['success' => true, 'message' => 'success', 'data' => ['user_id' => $user->id, 'role' => config('common.user_ids')[$user->role_id], 'vehicle_id' => $user->vehicle_id, 'assign_vehicle_date' => $user->assign_vehicle_date]]);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+
+    }
+
 }
