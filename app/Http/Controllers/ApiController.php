@@ -145,6 +145,44 @@ class ApiController extends Controller
 
     }
 
+    public function completeToilet(Request $request)
+    {
+        try {
+            $toilet_id = $request->get('toilet_id');
+            $user_id = $request->get('user_id');
+            $assign_toilet = AssignToilets::find($toilet_id);
+
+            if(true == is_null($assign_toilet)){
+                //return response()->json(['success' => false, 'message' => 'Please Provide Correct Toilet Id']);
+                return response()->json(['success' => false]);
+            }
+            $assign_toilet->completed_by = $user_id;
+            $assign_toilet->save();
+
+            return response()->json(['success' => true, 'message' => 'success', 'data' => 'Toilet Mark as clean']);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+
+    }
+
+    public function getToiletCount(Request $request)
+    {
+        try {
+            $vehicle_id = $request->get('vehicle_id');
+            $complete_count = AssignToilets::getToiletCompleteCount($vehicle_id);
+            $pending_count = AssignToilets::getToiletPendingCount($vehicle_id);
+            $total = $complete_count + $pending_count;
+
+            return response()->json(['success' => true, 'message' => 'success', 'data' => ['complete_count' => $complete_count, 'pending_count' => $pending_count, 'total' => $total]]);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+
+    }
+
 
     public function uploadFile(Request $request)
     {

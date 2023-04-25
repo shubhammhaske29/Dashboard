@@ -51,9 +51,29 @@ class AssignToilets extends Authenticatable
                             LEFT JOIN toilets ON (toilets.id = assign_toilets.toilet_id)
                             LEFT JOIN vehicles ON (vehicles.id = assign_toilets.vehicle_id)
                             LEFT JOIN cleaning_types ON (cleaning_types.id = assign_toilets.cleaning_type_id)
-                            where (assign_toilets.deleted_by IS NULL AND assign_toilets.image_path IS NULL AND assign_toilets.completed_by IS NULL AND (assign_toilets.assign_date = ? OR assign_toilets.assign_date = ?)) OR (assign_toilets.is_reported_not_clean is TRUE AND assign_toilets.deleted_by IS NULL)',[\Carbon\Carbon::today(),\Carbon\Carbon::tomorrow()]);
+                            where (assign_toilets.deleted_by IS NULL AND assign_toilets.completed_by IS NULL AND (assign_toilets.assign_date = ? OR assign_toilets.assign_date = ?)) OR (assign_toilets.is_reported_not_clean is TRUE AND assign_toilets.deleted_by IS NULL AND (assign_toilets.assign_date = ? OR assign_toilets.assign_date = ?))',[\Carbon\Carbon::today(),\Carbon\Carbon::tomorrow(),\Carbon\Carbon::today(),\Carbon\Carbon::tomorrow()]);
 
         return $data;
+    }
+
+    public static function getToiletCompleteCount($vehicle_id)
+    {
+
+        $data = DB::select('select * 
+                            from assign_toilets 
+                            where assign_toilets.vehicle_id = ? AND assign_toilets.deleted_by IS NULL AND assign_toilets.completed_by IS true AND assign_toilets.assign_date = ?', [$vehicle_id, \Carbon\Carbon::today()]);
+
+        return count(array($data));
+    }
+
+    public static function getToiletPendingCount($vehicle_id)
+    {
+
+        $data = DB::select('select * 
+                            from assign_toilets 
+                            where assign_toilets.vehicle_id = ? AND assign_toilets.deleted_by IS NULL AND assign_toilets.completed_by IS NULL AND assign_toilets.assign_date = ?', [$vehicle_id, \Carbon\Carbon::today()]);
+
+        return count(array($data));
     }
 
     public static function getAssignToiletsListByVehicleId($vehicle_id,$user_type,$user_id)

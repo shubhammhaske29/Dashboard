@@ -54,6 +54,14 @@ Route::group([
         return (new ApiController())->reportToilet($request);
     });
 
+    Route::any('/completeToilet', function (Request $request) {
+        return (new ApiController())->completeToilet($request);
+    });
+
+    Route::any('/getToiletCount', function (Request $request) {
+        return (new ApiController())->getToiletCount($request);
+    });
+
     Route::any('/getUserInfo', function (Request $request) {
         return (new ApiController())->getUserInfo($request);
     });
