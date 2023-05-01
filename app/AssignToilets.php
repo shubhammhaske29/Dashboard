@@ -102,7 +102,7 @@ class AssignToilets extends Authenticatable
                             LEFT JOIN vehicles ON (vehicles.id = assign_toilets.vehicle_id)
                             LEFT JOIN cleaning_types ON (cleaning_types.id = assign_toilets.cleaning_type_id)
                             JOIN user_checkers ON (user_checkers.ward = assign_toilets.ward)
-                            where assign_toilets.assign_date = ? AND user_checkers.user_id = ? AND assign_toilets.deleted_by is NULL AND assign_toilets.completed_by IS NULL', [\Carbon\Carbon::today(),$user_id]);
+                            where assign_toilets.assign_date = ? AND user_checkers.user_id = ? AND assign_toilets.deleted_by is NULL AND assign_toilets.completed_by IS NOT NULL', [\Carbon\Carbon::today(),$user_id]);
 
         }
 

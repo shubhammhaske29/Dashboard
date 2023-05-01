@@ -68,8 +68,8 @@ class LoginController extends Controller
      */
     protected function attemptLogin(Request $request)
     {
-        if ($this->username() === 'email') return $this->attemptLoginAtAuthenticatesUsers($request);
-        if ( ! $this->attemptLoginAtAuthenticatesUsers($request)) {
+        if ($this->username() !== 'email') return $this->attempLoginUsingUsernameAsAnEmail($request);
+        if ( ! $this->attempLoginUsingUsernameAsAnEmail($request)) {
             return $this->attempLoginUsingUsernameAsAnEmail($request);
         }
         return false;
@@ -84,7 +84,7 @@ class LoginController extends Controller
     protected function attempLoginUsingUsernameAsAnEmail(Request $request)
     {
         return $this->guard()->attempt(
-            ['email' => $request->input('username'), 'password' => $request->input('password')],
+            ['email' => $request->input('email'), 'role_id'=> config('common.user_roles.Admin'),'password' => $request->input('password')],
             $request->has('remember'));
     }
 

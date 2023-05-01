@@ -1,6 +1,6 @@
 <head>
     <meta charset="UTF-8">
-    <title> @yield('htmlheader_title', 'TPDDL Dashboard') </title>
+    <title> @yield('htmlheader_title', 'SE PUNE') </title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
