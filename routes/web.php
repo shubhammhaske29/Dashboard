@@ -42,6 +42,10 @@ Route::get('/delete_toilet/{id}', ['as' => 'delete_toilet', 'uses' => 'ToiletCon
 Route::any('/assign_toilet_home', ['as' => 'assign_toilet_home', 'uses' => 'AssignToiletController@index']);
 Route::any('/assign_toilet', ['as' => 'assign_toilet', 'uses' => 'AssignToiletController@add']);
 Route::get('/delete_assign_toilet/{id}', ['as' => 'delete_assign_toilet', 'uses' => 'AssignToiletController@delete']);
+Route::get('/download_report/{id}', ['as' => 'download_report', 'uses' => 'AssignToiletController@download_report']);
+
+
+Route::any('/report_home', ['as' => 'report_home', 'uses' => 'AssignToiletController@report']);
 
 
 

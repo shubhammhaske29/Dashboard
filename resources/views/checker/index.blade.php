@@ -64,7 +64,7 @@
                                     @foreach($checkers as $checker)
                                         <tr>
                                             <td>{{ $count++ }}.</td>
-                                            <td>{{ ucwords($checker->name) }}</td>
+                                            <td>{{ $checker->name }}</td>
                                             <td>{{ $checker->zone }}</td>
                                             <td>{{ $checker->ward }}</td>
                                             <td>

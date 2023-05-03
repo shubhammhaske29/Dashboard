@@ -56,13 +56,15 @@ class Toilet extends Authenticatable
     public static function getToiletLists($date)
     {
 
-        $toilet_ids = DB::select('select assign_toilets.id 
+        $toilet_ids = DB::select('select assign_toilets.toilet_id 
                             from assign_toilets 
-                            where (assign_toilets.deleted_by IS NULL AND assign_toilets.image_path IS NULL AND assign_toilets.completed_by IS NULL AND assign_toilets.assign_date = ?) OR (assign_toilets.is_reported_not_clean is TRUE AND assign_toilets.deleted_by IS NULL)',[$date]);
+                            where (assign_toilets.deleted_by IS NULL AND assign_toilets.completed_by IS NULL AND assign_toilets.assign_date = ?) OR (assign_toilets.is_reported_not_clean is TRUE AND assign_toilets.deleted_by IS NULL AND assign_toilets.assign_date = ?)',[$date,$date]);
 
         $resultArray = json_decode(json_encode($toilet_ids), true);
+        $arrToiletIds = array_column($resultArray,'toilet_id');
+
         $toilets = Toilet::select('toilets.id', 'toilets.name','toilets.ward')
-            ->whereNotIn('toilets.id', $resultArray)
+            ->whereNotIn('toilets.id', $arrToiletIds)
             ->whereNull('toilets.deleted_by')
             ->orderBy('toilets.id', 'DESC')
             ->get();

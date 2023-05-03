@@ -28,12 +28,6 @@
             @endif
 
             <div class="login-box-body">
-               
-		<div class="login-logo">
-                	<a href="{{ url('/') }}">
-                    		<img src="{{ asset('/img/tpddl_logo.jpg') }}" style="width: 175px;height: 50px;">
-                	</a>
-	        </div><!-- /.login-logo -->
 
 		<p class="login-box-msg">Reset Password</p>
 

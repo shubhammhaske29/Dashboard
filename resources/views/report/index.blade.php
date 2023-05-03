@@ -12,7 +12,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="box box-info">
                 <div class="box-header with-border text-center">
-                    <h3 class="box-title"><?php echo "Users"; ?></h3>
+                    <h3 class="box-title"><?php echo "Report"; ?></h3>
                 </div>
                 <div class="box-body with-border">
 
@@ -35,13 +35,7 @@
                     @endif
                     <div class="row">
                         <div class="col-sm-11">
-                            <h4 class="card-title mb-0">Users</h4>
-                        </div><!--col-->
-
-                        <div class="col-sm-1 right">
-                            <div class="btn-toolbar float-right" role="toolbar" aria-label="Toolbar with button groups">
-                                <a href="{{ route("add_user") }}" class="btn btn-success ml-1" data-toggle="tooltip" data-placement="top" title="Add">Add <i class="fa fa-plus-circle"></i></a>
-                            </div><!--btn-toolbar-->
+                            <h4 class="card-title mb-0">Report</h4>
                         </div><!--col-->
                     </div><!--row-->
                     <div class="clearfix"></div>
@@ -53,21 +47,28 @@
                                     <thead class="thead-light">
                                     <tr>
                                         <th>S.No.</th>
-                                        <th>Name</th>
-                                        <th>Role</th>
-                                        <th>Edit/Delete</th>
+                                        <th>Assign Date</th>
+                                        <th>Toilet Name</th>
+                                        <th>Vehicle Number</th>
+                                        <th>Cleaning Type</th>
+                                        <th>Zone</th>
+                                        <th>Ward</th>
+                                        <th>Download</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <?php $count = 1; ?>
-                                    @foreach($users as $user)
+                                    @foreach($assign_toilets as $assign_toilet)
                                         <tr>
                                             <td>{{ $count++ }}.</td>
-                                            <td>{{ $user->name }}</td>
-                                            <td>{{ config('common.user_ids')[$user->role_id] }}</td>
+                                            <td>{{ $assign_toilet->assign_date }}</td>
+                                            <td>{{ $assign_toilet->name }}</td>
+                                            <td>{{ $assign_toilet->number }}</td>
+                                            <td>{{ $assign_toilet->cleaning_type_name }}</td>
+                                            <td>{{ $assign_toilet->zone }}</td>
+                                            <td>{{ $assign_toilet->ward }}</td>
                                             <td>
-                                                <a href="{{ route("edit_user",$user->id) }}" data-toggle="tooltip" data-placement="top" title="Edit" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                                <a href="{{ route("delete_user",$user->id) }}" data-toggle="tooltip" data-placement="top" title="Delete" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                                <a href="{{ route("delete_assign_toilet",$assign_toilet->id) }}" data-toggle="tooltip" data-placement="top" title="download" class="btn btn-file btn-sm"><i class="fa fa-file-zip-o"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach

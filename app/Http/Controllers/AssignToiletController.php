@@ -40,6 +40,15 @@ class AssignToiletController extends Controller
             ->with('assign_toilets',$data);
     }
 
+    public function report()
+    {
+
+        $data = AssignToilets::getReport();
+
+        return view('report.index')
+            ->with('assign_toilets',$data);
+    }
+
     public function add(Request $request)
     {
         try
@@ -104,4 +113,26 @@ class AssignToiletController extends Controller
         }
         return Redirect::to(route("assign_toilet_home"));
     }
+
+    public function download_report($id, Request $request)
+    {
+        $zip = new ZipArchive;
+
+        $fileName = $id.'.zip';
+
+        if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE)
+        {
+            $files = File::files(public_path('myFiles'));
+
+            foreach ($files as $key => $value) {
+                $relativeNameInZipFile = basename($value);
+                $zip->addFile($value, $relativeNameInZipFile);
+            }
+
+            $zip->close();
+        }
+
+        return response()->download(public_path($fileName));
+    }
+
 }

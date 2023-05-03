@@ -62,7 +62,7 @@
                                     @foreach($vehicles as $vehicle)
                                         <tr>
                                             <td>{{ $count++ }}.</td>
-                                            <td>{{ ucwords($vehicle->number) }}</td>
+                                            <td>{{ $vehicle->number }}</td>
                                             <td>
                                                 <a href="{{ route("edit_vehicle",$vehicle->id) }}" data-toggle="tooltip" data-placement="top" title="Edit" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
                                                 <a href="{{ route("delete_vehicle",$vehicle->id) }}" data-toggle="tooltip" data-placement="top" title="Delete" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
