@@ -207,7 +207,10 @@
 
             let toilet_list = '<?php echo json_encode($toilet_list);?>';
             toilet_list = JSON.parse(toilet_list);
-            let toilets = toilet_list[date][ward];
+            let toilets = [];
+            if(toilet_list[date] !== undefined){
+                toilets = toilet_list[date][ward];
+            }
             let content = '';
             let index = 0;
 
