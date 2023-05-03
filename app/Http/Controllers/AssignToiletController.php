@@ -118,12 +118,16 @@ class AssignToiletController extends Controller
         return Redirect::to(route("assign_toilet_home"));
     }
 
-    public function download_report($id)
+    public function download_report($id, Request $request)
     {
-        $fileName = '/tmp/'.$id.'.zip';
-        $this->ZipCreate(storage_path() . '/Images/' . $id . '/', $fileName);
-
-        return response()->download($fileName);
+        $fileName = '/tmp/' . $id . '.zip';
+        $this->ZipCreate(public_path() . '/Images/' . $id . '/', $fileName);
+        if (file_exists($fileName)) {
+            return response()->download($fileName);
+        } else {
+            $request->session()->flash('error', 'Images not present!');
+            return Redirect::to(route("report_home"));
+        }
     }
 
     function ZipCreate($source, $destination)

@@ -209,7 +209,7 @@ class ApiController extends Controller
             $check = in_array($extension, $allowedfileExtension);
 
             if ($check) {
-                $destinationPath = storage_path() . '/Images/' . $id . '/';
+                $destinationPath = public_path() . '/Images/' . $id . '/';
                 $file->move($destinationPath.$type, time() . '.' . $file->getClientOriginalExtension());
             } else {
                 //return response()->json(['success' => false, 'message' => 'Invalid File Format']);

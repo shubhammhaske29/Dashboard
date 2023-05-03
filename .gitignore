@@ -12,4 +12,4 @@ yarn-error.log
 /public/declared-capacity-report
 /public/entitlement-report
 *.sqlite
-/storage/Images/*
+/public/Images/*
