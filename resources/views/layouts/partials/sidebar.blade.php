@@ -36,9 +36,7 @@ $active_tab     = \Request::segment(1);
 
             <li class="@if($active_tab == 'assign_toilet_home') active @endif"><a href="{{ route('assign_toilet_home') }}"><i class='fa fa-window-restore'></i><span>Assign Toilet</span></a></li>
 
-<!--
             <li class="@if($active_tab == 'report_home') active @endif"><a href="{{ route('report_home') }}"><i class='fa fa-file-archive-o'></i><span>Report</span></a></li>
--->
 
             <li class="@if($active_tab == 'logout') active @endif">
 

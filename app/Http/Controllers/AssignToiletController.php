@@ -10,6 +10,10 @@ use App\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use ZipArchive;
+
 
 class AssignToiletController extends Controller
 {
@@ -114,25 +118,57 @@ class AssignToiletController extends Controller
         return Redirect::to(route("assign_toilet_home"));
     }
 
-    public function download_report($id, Request $request)
+    public function download_report($id)
     {
-        $zip = new ZipArchive;
+        $fileName = '/tmp/'.$id.'.zip';
+        $this->ZipCreate(storage_path() . '/Images/' . $id . '/', $fileName);
 
-        $fileName = $id.'.zip';
+        return response()->download($fileName);
+    }
 
-        if ($zip->open(public_path($fileName), ZipArchive::CREATE) === TRUE)
-        {
-            $files = File::files(public_path('myFiles'));
-
-            foreach ($files as $key => $value) {
-                $relativeNameInZipFile = basename($value);
-                $zip->addFile($value, $relativeNameInZipFile);
-            }
-
-            $zip->close();
+    function ZipCreate($source, $destination)
+    {
+        if (!extension_loaded('zip') || !file_exists($source)) {
+            return false;
         }
 
-        return response()->download(public_path($fileName));
+        $zip = new ZipArchive();
+        if (!$zip->open($destination, ZIPARCHIVE::CREATE)) {
+            return false;
+        }
+
+        $source = str_replace('\\', '/', realpath($source));
+
+        if (is_dir($source) === true)
+        {
+            $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+
+            foreach ($files as $file)
+            {
+                $file = str_replace('\\', '/', $file);
+
+                // Ignore "." and ".." folders
+                if( in_array(substr($file, strrpos($file, '/')+1), array('.', '..')) )
+                    continue;
+
+                $file = realpath($file);
+
+                if (is_dir($file) === true)
+                {
+                    $zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+                }
+                else if (is_file($file) === true)
+                {
+                    $zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+                }
+            }
+        }
+        else if (is_file($source) === true)
+        {
+            $zip->addFromString(basename($source), file_get_contents($source));
+        }
+
+        return $zip->close();
     }
 
 }

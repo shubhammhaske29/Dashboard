@@ -68,7 +68,7 @@
                                             <td>{{ $assign_toilet->zone }}</td>
                                             <td>{{ $assign_toilet->ward }}</td>
                                             <td>
-                                                <a href="{{ route("delete_assign_toilet",$assign_toilet->id) }}" data-toggle="tooltip" data-placement="top" title="download" class="btn btn-file btn-sm"><i class="fa fa-file-zip-o"></i></a>
+                                                <a href="{{ route("download_report",$assign_toilet->id) }}" data-toggle="tooltip" data-placement="top" title="download" class="btn btn-file btn-sm"><i class="fa fa-file-zip-o"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach

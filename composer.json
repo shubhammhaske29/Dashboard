@@ -17,7 +17,8 @@
         "laravel/tinker": "~1.0",
         "nunomaduro/collision": "*",
         "stechstudio/laravel-zipstream": "*",
-        "symfony/thanks": "^1.2"
+        "symfony/thanks": "^1.2",
+        "ext-zip": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
