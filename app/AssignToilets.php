@@ -72,21 +72,21 @@ class AssignToilets extends Authenticatable
     public static function getToiletCompleteCount($vehicle_id)
     {
 
-        $data = DB::select('select * 
+        $data = DB::select('select count(*) as count
                             from assign_toilets 
-                            where assign_toilets.vehicle_id = ? AND assign_toilets.deleted_by IS NULL AND assign_toilets.completed_by IS true AND assign_toilets.assign_date = ?', [$vehicle_id, \Carbon\Carbon::today()]);
+                            where assign_toilets.vehicle_id = ? AND assign_toilets.assign_date = ? AND assign_toilets.deleted_by IS NULL AND assign_toilets.completed_by IS NOT NULL', [$vehicle_id, \Carbon\Carbon::today()]);
 
-        return count(array($data));
+        return current($data)->count;
     }
 
     public static function getToiletPendingCount($vehicle_id)
     {
 
-        $data = DB::select('select * 
+        $data = DB::select('select count(*) as count
                             from assign_toilets 
                             where assign_toilets.vehicle_id = ? AND assign_toilets.deleted_by IS NULL AND assign_toilets.completed_by IS NULL AND assign_toilets.assign_date = ?', [$vehicle_id, \Carbon\Carbon::today()]);
 
-        return count(array($data));
+        return current($data)->count;
     }
 
     public static function getAssignToiletsListByVehicleId($vehicle_id,$user_type,$user_id)

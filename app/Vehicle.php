@@ -50,9 +50,9 @@ class Vehicle extends Authenticatable
     public static function deleteVehicle($id)
     {
         $vehicle = Vehicle::find($id);
-        $vehicle->deleted_at = now();
-        $vehicle->deleted_by = Auth::user()->id;
-        $vehicle->update();
+/*        $vehicle->deleted_at = now();
+        $vehicle->deleted_by = Auth::user()->id;*/
+        $vehicle->delete();
     }
 
     public static function getVehicleList()
@@ -67,14 +67,11 @@ class Vehicle extends Authenticatable
 
     public static function getNotAssignVehicleList()
     {
-        $vehicles = DB::table('vehicles')
-            ->leftJoin('users', 'users.vehicle_id', '=', 'vehicles.id')
-            ->select('vehicles.id', 'vehicles.number')
-            ->where('users.assign_vehicle_date', '!=', \Carbon\Carbon::today())
-            ->orWhereNull('users.assign_vehicle_date')
-            ->whereNull('vehicles.deleted_by')
-            ->orderBy('vehicles.id', 'DESC')
-            ->get();
+
+        $vehicles = DB::select('select vehicles.id,vehicles.number from vehicles 
+                            LEFT JOIN users ON (users.vehicle_id = vehicles.id)
+                            where (users.assign_vehicle_date != ? OR users.assign_vehicle_date IS NULL) AND vehicles.deleted_by IS NULL',[\Carbon\Carbon::today()]);
+
 
         return $vehicles;
     }

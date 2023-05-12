@@ -57,9 +57,9 @@ class User extends Authenticatable
     public static function deleteUser($id)
     {
         $user = User::find($id);
-        $user->deleted_at = now();
-        $user->deleted_by = Auth::user()->id;
-        $user->update();
+/*        $user->deleted_at = now();
+        $user->deleted_by = Auth::user()->id;*/
+        $user->delete();
     }
 
     public static function getUserList()
