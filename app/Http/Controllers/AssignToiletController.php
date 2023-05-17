@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AssignToilets;
+use App\Expense;
 use App\Toilet;
 use App\User;
 use App\UserChecker;
@@ -44,14 +45,74 @@ class AssignToiletController extends Controller
             ->with('assign_toilets',$data);
     }
 
-    public function report()
+    public function report(Request $request)
     {
+        $vehicles = Vehicle::getVehicleList();
+        $data = [];
+        if ($request->isMethod('POST')) {
+            $requestData = $request->all();
 
-        $data = AssignToilets::getReport();
+            if ((strtotime($requestData['start_date'])) > (strtotime($requestData['end_date'])))
+            {
+                $request->session()->flash('error', 'End date is greater than Start date !');
+                return view('report.cleaning')
+                    ->with('assign_toilets',$data)
+                    ->with('vehicles',$vehicles)
+                    ->with('start_date',$requestData['start_date'])
+                    ->with('end_date',$requestData['end_date'])
+                    ->with('vehicle_id',$requestData['vehicle_id']);
+            }
 
-        return view('report.index')
-            ->with('assign_toilets',$data);
+            $data = AssignToilets::getReport($requestData['start_date'],$requestData['end_date'],$requestData['vehicle_id']);
+
+            return view('report.cleaning')
+                ->with('assign_toilets',$data)
+                ->with('vehicles',$vehicles)
+                ->with('start_date',$requestData['start_date'])
+                ->with('end_date',$requestData['end_date'])
+                ->with('vehicle_id',$requestData['vehicle_id']);
+        }
+
+        return view('report.cleaning')
+            ->with('assign_toilets',$data)
+            ->with('vehicles',$vehicles);
+
     }
+
+    public function expenseReport(Request $request)
+    {
+        $vehicles = Vehicle::getVehicleList();
+        $data = [];
+        if ($request->isMethod('POST')) {
+            $requestData = $request->all();
+
+            if ((strtotime($requestData['start_date'])) > (strtotime($requestData['end_date'])))
+            {
+                $request->session()->flash('error', 'End date is greater than Start date !');
+                return view('report.expense')
+                    ->with('assign_toilets',$data)
+                    ->with('vehicles',$vehicles)
+                    ->with('start_date',$requestData['start_date'])
+                    ->with('end_date',$requestData['end_date'])
+                    ->with('vehicle_id',$requestData['vehicle_id']);
+            }
+
+            $data = Expense::getReport($requestData['start_date'],$requestData['end_date'],$requestData['vehicle_id']);
+
+            return view('report.expense')
+                ->with('assign_toilets',$data)
+                ->with('vehicles',$vehicles)
+                ->with('start_date',$requestData['start_date'])
+                ->with('end_date',$requestData['end_date'])
+                ->with('vehicle_id',$requestData['vehicle_id']);
+        }
+
+        return view('report.expense')
+            ->with('assign_toilets',$data)
+            ->with('vehicles',$vehicles);
+
+    }
+
 
     public function add(Request $request)
     {

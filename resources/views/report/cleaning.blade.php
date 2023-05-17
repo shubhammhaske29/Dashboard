@@ -12,7 +12,45 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="box box-info">
                 <div class="box-header with-border text-center">
-                    <h3 class="box-title"><?php echo "Report"; ?></h3>
+                    <form action="{{route("report_home")}}" method="post" enctype="multipart/form-data" id="report_form">
+                        @csrf
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-2">
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Start Date</label>
+                                        <input type="text" class="form-control form-control-sm fa fa-calendar datepicker rtm-iex-dsm-datepicker" name="start_date" id="start_date" @if(isset($start_date)) value="{{ date('d-m-Y',strtotime($start_date)) }}" @else value="{{ date('d-m-Y') }}" @endif readonly/>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>End Date</label>
+                                        <input type="text" class="form-control form-control-sm fa fa-calendar datepicker rtm-iex-dsm-datepicker" name="end_date" id="end_date" @if(isset($end_date)) value="{{ date('d-m-Y',strtotime($end_date)) }}" @else value="{{ date('d-m-Y') }}" @endif readonly/>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Vehicle</label>
+                                        <select class="form-control" name="vehicle_id" id="vehicle_id">
+                                            @foreach ($vehicles as $vehicle)
+                                                <option value='{{$vehicle->id}}' @if(isset($vehicle_id) && $vehicle_id == $vehicle->id) selected @endif>{{$vehicle->number}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label style="padding-top: 22px;"></label>
+                                        <button type="submit" id="search" class="btn btn-md btn-block btn-success">Search</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
                 <div class="box-body with-border">
 
@@ -94,7 +132,12 @@
 
     </div>
     <script type="text/javascript">
-        $( document ).ready(function() {
+        $(document).ready(function () {
+            $('#start_date,#end_date').datepicker({
+                autoclose: true,
+                "format": "dd-mm-yyyy",
+            });
+
             //$('#tab-header').html('Users');
             $.noConflict();
             $('#user_table').DataTable();

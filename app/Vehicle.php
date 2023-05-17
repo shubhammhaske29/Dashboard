@@ -68,7 +68,7 @@ class Vehicle extends Authenticatable
     public static function getNotAssignVehicleList()
     {
 
-        $vehicles = DB::select('select vehicles.id,vehicles.number from vehicles 
+        $vehicles = DB::select('select distinct(vehicles.id),vehicles.number from vehicles 
                             LEFT JOIN users ON (users.vehicle_id = vehicles.id)
                             where (users.assign_vehicle_date != ? OR users.assign_vehicle_date IS NULL) AND vehicles.deleted_by IS NULL',[\Carbon\Carbon::today()]);
 

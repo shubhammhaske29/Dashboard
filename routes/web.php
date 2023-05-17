@@ -47,6 +47,8 @@ Route::get('/download_report/{id}', ['as' => 'download_report', 'uses' => 'Assig
 
 Route::any('/report_home', ['as' => 'report_home', 'uses' => 'AssignToiletController@report']);
 
+Route::any('/expense_home', ['as' => 'expense_home', 'uses' => 'AssignToiletController@expenseReport']);
+
 
 
 Auth::routes();

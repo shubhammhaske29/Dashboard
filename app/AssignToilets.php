@@ -56,15 +56,17 @@ class AssignToilets extends Authenticatable
         return $data;
     }
 
-    public static function getReport()
+    public static function getReport($start_date,$end_date,$vehicle_id)
     {
+        $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $start_date)->startOfDay();
+        $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $end_date)->endOfDay();
 
         $data = DB::select('select assign_toilets.id,assign_toilets.assign_date,toilets.name,vehicles.number,cleaning_types.name as cleaning_type_name,assign_toilets.zone,assign_toilets.ward 
                             from assign_toilets 
                             LEFT JOIN toilets ON (toilets.id = assign_toilets.toilet_id)
                             LEFT JOIN vehicles ON (vehicles.id = assign_toilets.vehicle_id)
                             LEFT JOIN cleaning_types ON (cleaning_types.id = assign_toilets.cleaning_type_id)
-                            where assign_toilets.completed_by IS NOT NULL');
+                            where assign_toilets.completed_by IS NOT NULL AND assign_toilets.vehicle_id = ? AND assign_toilets.assign_date BETWEEN ? AND ?', [$vehicle_id, $startDate,$endDate]);
 
         return $data;
     }

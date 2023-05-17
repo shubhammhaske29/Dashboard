@@ -65,6 +65,19 @@ class Expense extends Authenticatable
         return $users;
     }
 
+    public static function getReport($start_date,$end_date,$vehicle_id)
+    {
+        $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $start_date)->startOfDay();
+        $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $end_date)->endOfDay();
+
+        $data = DB::select('select expenses.id,expenses.expense_date,vehicles.number,expenses.start_read,expenses.end_read,expenses.petrol_amount,expenses.diesel_amount 
+                            from expenses
+                            JOIN vehicles ON (vehicles.id = expenses.vehicle_id)
+                            where expenses.vehicle_id = ? AND expenses.expense_date BETWEEN ? AND ?', [$vehicle_id, $startDate,$endDate]);
+
+        return $data;
+    }
+
     public static function deleteAssignToilet($id)
     {
         Expense::where('id',$id)->delete();
