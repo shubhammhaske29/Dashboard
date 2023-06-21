@@ -247,4 +247,20 @@ class ApiController extends Controller
 
     }
 
+    public function getVehicleName(Request $request)
+    {
+        try {
+            $vehicle_id = $request->get('vehicle_id');
+            $veicle = Vehicle::find($vehicle_id);
+            if (!$veicle) {
+                return response()->json(['success' => false, 'message' => 'Vehicle Not Exist']);
+            }
+            return response()->json(['success' => true, 'vehicle_number' => $veicle->number]);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        }
+
+    }
+
 }

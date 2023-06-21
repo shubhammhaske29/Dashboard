@@ -66,6 +66,10 @@ Route::group([
         return (new ApiController())->getUserInfo($request);
     });
 
+    Route::any('/getVehicleName', function (Request $request) {
+        return (new ApiController())->getVehicleName($request);
+    });
+
 });
 
 Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function () {
