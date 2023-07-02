@@ -34,6 +34,12 @@ Route::any('/add_user_checker', ['as' => 'add_user_checker', 'uses' => 'CheckerC
 Route::any('/edit_user_checker/{id}', ['as' => 'edit_user_checker', 'uses' => 'CheckerController@edit']);
 Route::get('/delete_user_checker/{id}', ['as' => 'delete_user_checker', 'uses' => 'CheckerController@delete']);
 
+Route::any('/ward_home', ['as' => 'ward_home', 'uses' => 'ZoneController@index']);
+Route::any('/add_ward', ['as' => 'add_ward', 'uses' => 'ZoneController@add']);
+Route::any('/edit_ward/{id}', ['as' => 'edit_ward', 'uses' => 'ZoneController@edit']);
+Route::get('/delete_ward/{id}', ['as' => 'delete_ward', 'uses' => 'ZoneController@delete']);
+
+
 Route::any('/toilet_home', ['as' => 'toilet_home', 'uses' => 'ToiletController@index']);
 Route::any('/add_toilet', ['as' => 'add_toilet', 'uses' => 'ToiletController@add']);
 Route::any('/edit_toilet/{id}', ['as' => 'edit_toilet', 'uses' => 'ToiletController@edit']);

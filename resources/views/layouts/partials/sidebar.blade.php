@@ -32,6 +32,8 @@ $active_tab     = \Request::segment(1);
 
             <li class="@if($active_tab == 'user_checker_home') active @endif"><a href="{{ route('user_checker_home') }}"><i class='fa fa-check-circle'></i><span>Assign Checker</span></a></li>
 
+            <li class="@if($active_tab == 'user_checker_home') active @endif"><a href="{{ route('ward_home') }}"><i class='fa fa-check-circle'></i><span>Ward</span></a></li>
+
             <li class="@if($active_tab == 'toilet_home') active @endif"><a href="{{ route('toilet_home') }}"><i class='fa fa-recycle'></i><span>Toilet</span></a></li>
 
             <li class="@if($active_tab == 'assign_toilet_home') active @endif"><a href="{{ route('assign_toilet_home') }}"><i class='fa fa-window-restore'></i><span>Assign Toilet</span></a></li>

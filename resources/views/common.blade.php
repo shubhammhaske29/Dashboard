@@ -5,6 +5,7 @@ return n<10 ? '0'+n : n
 }
 
 function showWard() {
+    debugger
     let zone = $('#zone option:selected').val()
     let zones = '<?php echo json_encode(config('common.zones'));?>';
     zones = JSON.parse(zones);

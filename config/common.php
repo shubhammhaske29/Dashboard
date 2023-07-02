@@ -11,6 +11,10 @@ return [
     'cleaning_types' => [
         1 => 'Deep',
         2 => 'Regular'],
+    'temp_zones' => [
+        'Zone 1' => ["Nagar Road", "Yerawada", "Dhole Patil Road"],
+        'Zone 5' => ["Kasba", "Bhawani Peth", "Bibwewadi"]
+    ],
     'zones' => [
         'Zone 1' => ["Nagar Road", "Yerawada", "Dhole Patil Road"],
         'Zone 5' => ["Kasba", "Bhawani Peth", "Bibwewadi"]
