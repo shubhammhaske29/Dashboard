@@ -58,7 +58,7 @@ class Toilet extends Authenticatable
 
         $toilet_ids = DB::select('select assign_toilets.toilet_id 
                             from assign_toilets 
-                            where (assign_toilets.deleted_by IS NULL AND assign_toilets.completed_by IS NULL AND assign_toilets.assign_date >= ?) OR (assign_toilets.is_reported_not_clean is TRUE AND assign_toilets.deleted_by IS NULL AND assign_toilets.assign_date >= ?)',[$date,$date]);
+                            where (assign_toilets.deleted_by IS NULL AND assign_toilets.completed_by IS NULL AND assign_toilets.assign_date = ?) OR (assign_toilets.is_reported_not_clean is TRUE AND assign_toilets.deleted_by IS NULL AND assign_toilets.assign_date = ?)',[$date,$date]);
 
         $resultArray = json_decode(json_encode($toilet_ids), true);
         $arrToiletIds = array_column($resultArray,'toilet_id');

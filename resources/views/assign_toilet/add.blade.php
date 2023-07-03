@@ -162,7 +162,7 @@
             $('#assign_date').datepicker({
                 autoclose: true,
                 "startDate": "{{ date("d-m-Y") }}",
-                "endDate": "{{ date("d-m-Y", strtotime("+1 day")) }}",
+                "endDate": "{{ date("d-m-Y", strtotime("+7 day")) }}",
                 "format": "dd-mm-yyyy",
                 "maxDate": new Date()
             });
@@ -205,36 +205,45 @@
             let ward = $('#ward option:selected').val();
             let date = $('#assign_date').val();
 
-            let toilet_list = '<?php echo json_encode($toilet_list);?>';
-            toilet_list = JSON.parse(toilet_list);
-            let toilets = [];
-            if(toilet_list[date] !== undefined){
-                toilets = toilet_list[date][ward];
-            }
-            let content = '';
-            let index = 0;
+            let form_data = {"date":date,"_token": '{{csrf_token()}}'};
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                data:form_data,
+                url: "{{route("get_toilet_data")}}",
+                success: function (response) {
 
-            $.each(toilets, function (k,toilet) {
-                if (index === 0) {
-                    content += '<option value="' + k + '" selected>' + toilet['name'] + '</option>';
-                } else {
-                    content += '<option value="' + k + '">' + toilet['name'] + '</option>';
+                    let toilet_list = response.data;
+                    let toilets = [];
+                    if(toilet_list[date] !== undefined){
+                        toilets = toilet_list[date][ward];
+                    }
+                    let content = '';
+                    let index = 0;
+
+                    $.each(toilets, function (k,toilet) {
+                        if (index === 0) {
+                            content += '<option value="' + k + '" selected>' + toilet['name'] + '</option>';
+                        } else {
+                            content += '<option value="' + k + '">' + toilet['name'] + '</option>';
+                        }
+                        index++;
+                    });
+                    $("#toilet_id").html(content);
+
+                    $("#toilet_id").multiselect({
+                        nonSelectedText: 'Select Toilet',
+                        enableFiltering: true,
+                        includeSelectAllOption: true,
+                        enableCaseInsensitiveFiltering: true,
+                        buttonWidth:'420px'
+                    });
+
+                    $("#toilet_id").multiselect('rebuild');
+                    $("#toilet_id").multiselect('selectAll', false);
+                    $("#toilet_id").multiselect('updateButtonText');
                 }
-                index++;
             });
-            $("#toilet_id").html(content);
-
-            $("#toilet_id").multiselect({
-                nonSelectedText: 'Select Toilet',
-                enableFiltering: true,
-                includeSelectAllOption: true,
-                enableCaseInsensitiveFiltering: true,
-                buttonWidth:'420px'
-            });
-
-            $("#toilet_id").multiselect('rebuild');
-            $("#toilet_id").multiselect('selectAll', false);
-            $("#toilet_id").multiselect('updateButtonText');
 
         }
 

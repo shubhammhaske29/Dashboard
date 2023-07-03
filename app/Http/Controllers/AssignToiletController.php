@@ -121,15 +121,11 @@ class AssignToiletController extends Controller
 
             if (!$request->isMethod('POST')) {
                 $today = date("Y-m-d");
-                $tomorrow = date("Y-m-d", strtotime("+1 days"));
                 $vehicles = Vehicle::getVehicleList();
                 $toilet_list = [];
 
                 foreach (Toilet::getToiletLists($today) as $toilet){
                     $toilet_list[date("d-m-Y")][$toilet->ward][$toilet->id] = $toilet;
-                }
-                foreach (Toilet::getToiletLists($tomorrow) as $toilet){
-                    $toilet_list[date("d-m-Y", strtotime("+1 days"))][$toilet->ward][$toilet->id] = $toilet;
                 }
 
                 return view('assign_toilet.add')
@@ -165,6 +161,23 @@ class AssignToiletController extends Controller
         {
             $request->session()->flash('error', $e->getMessage());
             return Redirect::to(route("assign_toilet_home"));
+        }
+    }
+
+    public function getToiletData(Request $request)
+    {
+        try {
+            $today = $request->get('date');
+
+            $toilet_list = [];
+
+            foreach (Toilet::getToiletLists(date("Y-m-d", strtotime($today))) as $toilet) {
+                $toilet_list[$today][$toilet->ward][$toilet->id] = $toilet;
+            }
+            return response()->json(['success' => true, 'message' => 'success', 'data' => $toilet_list]);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 
