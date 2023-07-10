@@ -97,7 +97,7 @@
                                             <div class="col-md-3">
                                                 <select class="form-control" name="zone" id="zone">
                                                     <option disabled>--Select Zone--</option>
-                                                    @foreach (config('common.zones') as $zone=>$wards)
+                                                    @foreach ($zones as $zone=>$wards)
                                                         <option value='{{$zone}}'>{{$zone}}</option>
                                                     @endforeach
                                                 </select>
@@ -182,7 +182,7 @@
 
         function showToiletWard() {
             let zone = $('#zone option:selected').val()
-            let zones = '<?php echo json_encode(config('common.zones'));?>';
+            let zones = '<?php echo json_encode($zones);?>';
             zones = JSON.parse(zones);
             let wards = zones[zone];
             let content = '';

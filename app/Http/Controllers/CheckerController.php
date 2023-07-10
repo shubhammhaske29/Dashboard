@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\UserChecker;
+use App\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -38,11 +39,15 @@ class CheckerController extends Controller
         try
         {
             $user_checker = new UserChecker();
-
+            $zones = [];
+            foreach (Ward::all() as $ward) {
+                $zones[$ward->zone][] = $ward->ward;
+            }
             if(!$request->isMethod('POST'))
             {
                 $users = UserChecker::getUsersForCheckerAssignment();
                 return view('checker.add')
+                    ->with('zones', $zones)
                     ->with('users',$users);
             }
 
@@ -75,12 +80,17 @@ class CheckerController extends Controller
     {
         try
         {
+            $zones = [];
+            foreach (Ward::all() as $ward) {
+                $zones[$ward->zone][] = $ward->ward;
+            }
             if(!$request->isMethod('POST'))
             {
                 $user_checker = UserChecker::find($id);
                 $user = User::find($user_checker->user_id);
                 return view('checker.edit')
                     ->with('user_checker',$user_checker)
+                    ->with('zones', $zones)
                     ->with('user',$user);
             }
 

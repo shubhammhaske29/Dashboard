@@ -8,6 +8,7 @@ use App\Toilet;
 use App\User;
 use App\UserChecker;
 use App\Vehicle;
+use App\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -118,7 +119,10 @@ class AssignToiletController extends Controller
     {
         try
         {
-
+            $zones = [];
+            foreach (Ward::all() as $ward) {
+                $zones[$ward->zone][] = $ward->ward;
+            }
             if (!$request->isMethod('POST')) {
                 $today = date("Y-m-d");
                 $vehicles = Vehicle::getVehicleList();
@@ -130,6 +134,7 @@ class AssignToiletController extends Controller
 
                 return view('assign_toilet.add')
                     ->with('vehicles', $vehicles)
+                    ->with('zones', $zones)
                     ->with('toilet_list', $toilet_list);
             }
 

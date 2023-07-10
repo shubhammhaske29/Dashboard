@@ -100,13 +100,8 @@
     </div>
     <script>
         $(document).ready(function () {
-            showWard();
 
-            $("#zone").change(function () {
-                showWard();
-            });
         });
-
     </script>
 
 @endsection

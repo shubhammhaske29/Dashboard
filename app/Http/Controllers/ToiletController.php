@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Toilet;
+use App\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -41,10 +42,14 @@ class ToiletController extends Controller
         try
         {
             $toilet = new Toilet();
-
+            $zones = [];
+            foreach (Ward::all() as $ward) {
+                $zones[$ward->zone][] = $ward->ward;
+            }
             if(!$request->isMethod('POST'))
             {
-                return view('toilet.add');
+                return view('toilet.add')
+                    ->with('zones', $zones);
             }
 
             $validator = Validator::make($request->all(), [
@@ -80,10 +85,15 @@ class ToiletController extends Controller
     {
         try
         {
+            $zones = [];
+            foreach (Ward::all() as $ward) {
+                $zones[$ward->zone][] = $ward->ward;
+            }
             if(!$request->isMethod('POST'))
             {
                 $toilet = Toilet::find($id);
                 return view('toilet.edit')
+                    ->with('zones', $zones)
                     ->with('toilet',$toilet);
             }
 
