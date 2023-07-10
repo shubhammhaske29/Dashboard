@@ -17,13 +17,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $wards = [];
-        if (Schema::hasTable('wards')) {
-            foreach (Ward::all() as $ward) {
-                $wards[$ward->zone][] = $ward->ward;
-            }
-            Config::set('common.zones',$wards);
-        }
 
     }
 
