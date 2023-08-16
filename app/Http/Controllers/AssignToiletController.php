@@ -153,8 +153,15 @@ class AssignToiletController extends Controller
 
             foreach ($arrToilets as $toiletId) {
                 $assign_toilet = new AssignToilets();
-                $data = $this->prepareData($request);
+                $data = new \stdClass();
+                $date = strtotime($request->get('assign_date'));
+                $data->assign_date = date('Y-m-d', $date);
+                $data->vehicle_id = $request->get('vehicle_id');
+                $data->cleaning_type_id = $request->get('cleaning_type_id');
                 $data->toilet_id = $toiletId;
+                $toilet = Toilet::find($toiletId);
+                $data->zone = $toilet->zone;
+                $data->ward = $toilet->ward;
                 $assign_toilet->saveData($data);
             }
 
